@@ -5,6 +5,7 @@ var field = [
 	[-1, -1, -1]
 ];
 var nextCharacter = 0;
+
 function initialize() {
 	field = [
 		[-1, -1, -1],
@@ -13,14 +14,18 @@ function initialize() {
 	];
 	nextCharacter = 0;
 	var id;
-	for(var i = 0; i < 9; i++) {
+
+	for (var i = 0; i < 9; i++) {
 		id = "cell" + i;
 		document.getElementById(id).innerHTML = "";
 	}
+
 	$(".column").css("pointer-events","auto");
+	document.getElementById("endGameTextDiv").innerHTML = "<h1> \t </h1>";
 }
+
 $(document).ready(function() {
-    $( "#startButton" ).click(function() {
+    $("#startButton").click(function() {
         initialize();
     });
     $('.column').click(function() {
@@ -33,12 +38,15 @@ $(document).ready(function() {
 function myClick(position) {
 	var y = Math.floor(position / 3);
 	var x = position % 3;
-	if(field[y][x] != -1) {		
+	if (field[y][x] != -1) {		
 		return;
 	}
+	
 	field[y][x] = nextCharacter;
 	updateCell(position);
+
 	check(position, x, y);
+
 	nextCharacter = nextCharacter ^ 1;
 };
 
@@ -49,28 +57,28 @@ function updateCell(position) {
 }
 
 function check(position, x, y) {
-	if(field[y][0] == nextCharacter 
+	if (field[y][0] == nextCharacter 
 		&& field[y][1] == nextCharacter 
 		&& field[y][2] == nextCharacter) {
 		endGame(nextCharacter);
 		return;
 	}
-	if(field[0][x] == nextCharacter 
+	if (field[0][x] == nextCharacter 
 		&& field[1][x] == nextCharacter 
 		&& field[2][x] == nextCharacter) {
 		endGame(nextCharacter);
 		return;
 	}
-	if(position % 2 == 0) {
-		if(field[0][0] == nextCharacter 
+	if (position % 2 == 0) {
+		if (field[0][0] == nextCharacter 
 			&& field[1][1] == nextCharacter 
 			&& field[2][2] == nextCharacter) {
 			endGame(nextCharacter);
 			return;
 		}
 	}
-	if(position % 2 == 0) {
-		if(field[0][2] == nextCharacter 
+	if (position % 2 == 0) {
+		if (field[0][2] == nextCharacter 
 			&& field[1][1] == nextCharacter 
 			&& field[2][0] == nextCharacter) {
 			endGame(nextCharacter);
@@ -81,8 +89,14 @@ function check(position, x, y) {
 
 function endGame(sign) {
 	$(".column").css("pointer-events","none");
-	if(sign == 0)
-		alert("Победили крестики")
-	else
-		alert("Победили нолики")
+
+	var text;
+	if (sign == 0) {
+		text = "Игра окончена. Победили крестики.";
+	} else {
+		text = "Победили нолики.";
+	}
+
+	var textField = document.getElementById('endGameTextDiv');
+	textField.innerHTML = "<h1>" + text + "</h1>";
 };
